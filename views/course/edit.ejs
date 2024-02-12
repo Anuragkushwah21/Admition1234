@@ -1,0 +1,57 @@
+<%- include('../header.ejs')%>
+<div class="bg-light">
+<h1 class="text-center mt-5 pt-5">Course's Edit</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 bg-body">
+                    <form action="/course_update/<%= d._id%>" method="post">
+                        <div>
+                            <label>Name</label>
+                            <input type="text" name="name" value="<%=d.name%>" class="form-control">
+                        </div>
+                        <div>
+                            <label>Email</label>
+                            <input type="text" name="email" value="<%=d.email%>" class="form-control">
+                        </div>
+                        <div>
+                            <label>Phone No</label>
+                            <input type="number" name="phone" value="<%=d.phone%>" class="form-control">
+                        </div>
+                        <div>
+                            <label>D.O.B</label>
+                            <input type="date" name="dob" value="<%=d.dob%>" class="form-control">
+                        </div>
+                        <div>
+                            <label>Address</label>
+                            <textarea name="address" class="form-control">
+                                <%=d.address%>
+                            </textarea>
+                        </div>
+                        <div>
+                            <label>Gender</label>
+                            <input type="radio" value="male" name="gender" />Male
+                            <input type="radio" value="female" name="gender" />FeMale
+                        </div>
+                        <div>
+                            <label>Education</label>
+                            <select class="form-control" name="education">
+                                <option>Select Collage</option>
+                                <option value="10ht">10ht</option>
+                                <option value="12th">12th</option>
+                                <option value="Ab Collage">Ab Collage</option>
+                                <option value="Cd Collage">Cd Collage</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Course</label>
+                            <input type="btech" name="course" value="btech" readonly class="form-control">
+                        </div >
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </form>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </div>
+    <%- include('../footer.ejs')%>
