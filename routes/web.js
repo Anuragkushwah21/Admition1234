@@ -6,9 +6,9 @@ const route = express.Router();
 const checkUserAuth=require('../middleware/auth')
 
 route.get("/", FrontController.login);
+route.get("/register", FrontController.register);
 route.get("/about",checkUserAuth, FrontController.about);
 route.get("/profile",checkUserAuth, FrontController.profile);
-route.get("/register", FrontController.register);
 route.get("/dashboard",checkUserAuth, FrontController.dashboard);
 route.get("/course",checkUserAuth, FrontController.course);
 route.get("/purchagepage",checkUserAuth, FrontController.purchagepage);
@@ -37,6 +37,9 @@ route.post("/updatePassword",checkUserAuth, FrontController.updatePassword);
 route.get("/admin/dashboard",checkUserAuth, AdminController.dashboard)
 route.get("/admin/adminprofile",checkUserAuth, AdminController.AdminProfile)
 route.post("/admin/update_status/:id",checkUserAuth, AdminController.update_status)
+route.post("/ForgotPassword", FrontController.ForgotPassword)
+// route.get("/reset_password", FrontController.reset_password)
 
 
 module.exports = route;
+ 

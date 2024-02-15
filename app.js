@@ -7,6 +7,7 @@ const connectDb = require("./db/connectdb");
 const cookieParser=require('cookie-parser')
 //file upload
 const fileupload=require('express-fileupload')
+const bodyParser = require("body-parser");
 
 //file upload
 app.use(fileupload({useTempFiles:true}))
@@ -16,6 +17,9 @@ app.use(cookieParser());
 
 //connect db
 connectDb();
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(express.urlencoded({ extended: false }));
 //connect flash and session

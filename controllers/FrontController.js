@@ -1,6 +1,8 @@
 const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const randomString = require("randomstring");
 const CourseModel = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 
@@ -35,7 +37,8 @@ class FrontController {
         n: name,
         i: image,
         e: email,
-        msg: req.flash("success"),error: req.flash("error"),
+        msg: req.flash("success"),
+        error: req.flash("error"),
       });
     } catch (error) {
       console.log(error);
@@ -156,7 +159,7 @@ class FrontController {
         if (user != null) {
           const isMatched = await bcrypt.compare(p, user.password);
           if (isMatched) {
-            if(user.role=="admin"){
+            if (user.role == "admin") {
               let token = jwt.sign(
                 { ID: user.id },
                 "anuragkushwah15394584728655hgbdhjdn"
@@ -164,17 +167,16 @@ class FrontController {
               // console.log(token)
               res.cookie("token", token);
               res.redirect("admin/dashboard");
+            } else {
+              //token genrate
 
-            }else{
-            //token genrate
-
-            let token = jwt.sign(
-              { ID: user.id },
-              "anuragkushwah15394584728655hgbdhjdn"
-            );
-            // console.log(token)
-            res.cookie("token", token);
-            res.redirect("/dashboard");
+              let token = jwt.sign(
+                { ID: user.id },
+                "anuragkushwah15394584728655hgbdhjdn"
+              );
+              // console.log(token)
+              res.cookie("token", token);
+              res.redirect("/dashboard");
             }
           } else {
             req.flash("error", "Email or Password is not valid");
@@ -194,7 +196,6 @@ class FrontController {
   };
 
   //update profile
-
   static updateProfile = async (req, res) => {
     try {
       const { id } = req.Userdata;
@@ -238,7 +239,6 @@ class FrontController {
       console.log(error);
     }
   };
-
   //change password
   static updatePassword = async (req, res) => {
     try {
@@ -268,6 +268,54 @@ class FrontController {
       } else {
         req.flash("error", "All fields are required");
         res.redirect("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //reset password
+  static reset_password = async (name, email, token) => {
+    console.log(name, email, token);
+    const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+    // connenct with the smtp server
+
+    let transporter = await nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+
+      auth: {
+        user: "anuragkofficial21@gmail.com",
+        pass: "bjlgmcajfhsvpwwz",
+      },
+    });
+    let info = await transporter.sendMail({
+      from: "test@gmail.com", // sender address
+      to: email, // list of receivers
+      subject: `For Reset Password`, // Subject line
+      text: "heelo", // plain text body
+      html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`, // html body
+    });
+  };
+  //forgot password
+  static ForgotPassword = async (req, res) => {
+    try {
+      const email = req.body.email;
+      const userdata = await UserModel.findOne({ email: email });
+      // console.log(userdata)
+      if (userdata) {
+        if (userdata.is_varified === 0) {
+          res.render("login", "Please verify the user email");
+        } else {
+          const randomstring = randomString.generate();
+          const updatedData = await UserModel.updateOne(
+            { email: email },
+            { $set: { token: randomstring } }
+          );
+          this.reset_password(userdata.name, userdata.email, randomstring);
+          res.render("login", "Please check your mail to reset your password");
+        }
+      } else {
+        res.render("login", "User Email is incorrect");
       }
     } catch (error) {
       console.log(error);

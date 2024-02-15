@@ -28,7 +28,7 @@ class AdminController {
   static update_status = async (req, res) => {
     try {
         const{name,email,status,comment}=req.body;
-        // console.log(req.params.id)
+        console.log(req.params.id)
         await CourseModel.findByIdAndUpdate(req.params.id,{
           comment:comment,
           status:status,
@@ -39,7 +39,6 @@ class AdminController {
       console.log(error);
     }
   };
-  
   static sendEmail = async (name,email,status,comment) => {
     console.log(name,email,status,comment)
     // connenct with the smtp server
@@ -62,6 +61,6 @@ class AdminController {
          <b>Comment from Admin</b> ${comment} `, // html body
     });
 };
-}
+} 
 
 module.exports=AdminController
