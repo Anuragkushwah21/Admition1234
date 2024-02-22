@@ -2,7 +2,7 @@ const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const randomString = require("randomstring");
+const randomstring = require("randomstring");
 const CourseModel = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 
@@ -102,9 +102,7 @@ class FrontController {
       console.log(error);
     }
   };
-
   //login registration
-
   static insertReg = async (req, res) => {
     try {
       // console.log(req.files.image)
@@ -135,6 +133,7 @@ class FrontController {
               },
             });
             await result.save();
+
             req.flash("success", "Registration Success plz login!");
             res.redirect("/"); // route url chalta h
           } else {
@@ -273,12 +272,31 @@ class FrontController {
       console.log(error);
     }
   };
+  //forgot password
+  static forgetPasswordVerify = async (req, res) => {
+    try {
+      const { email } = req.body;
+      const userData = await UserModel.findOne({ email: email });
+      //console.log(userData)
+      if (userData) {
+        const randomString = randomstring.generate();
+        await UserModel.updateOne(
+          { email: email },
+          { $set: { token: randomString } }
+        );
+        this.sendEmail(userData.name, userData.email, randomString);
+        req.flash("success", "Plz Check Your mail to reset Your Password!");
+        res.redirect("/");
+      } else {
+        req.flash("error", "You are not a registered Email");
+        res.redirect("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //reset password
-  static reset_password = async (name, email, token) => {
-    console.log(name, email, token);
-    const resetLink = `http://localhost:5000/reset-password?token=${token}`;
-    // connenct with the smtp server
-
+  static sendEmail = async (name, email, token) => {
     let transporter = await nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -291,32 +309,40 @@ class FrontController {
     let info = await transporter.sendMail({
       from: "test@gmail.com", // sender address
       to: email, // list of receivers
-      subject: `For Reset Password`, // Subject line
-      text: "heelo", // plain text body
-      html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`, // html body
+      subject: "Reset Password", // Subject line
+      text: "hello", // plain text body
+      html:
+        "<p>Hii " +
+        name +
+        ',Please click here to <a href="http://localhost:5000/reset-password?token=' +
+        token +
+        '">Reset</a>Your Password.',
     });
   };
-  //forgot password
-  static ForgotPassword = async (req, res) => {
+  static reset_Password = async (req, res) => {
     try {
-      const email = req.body.email;
-      const userdata = await UserModel.findOne({ email: email });
-      // console.log(userdata)
-      if (userdata) {
-        if (userdata.is_varified === 0) {
-          res.render("login", "Please verify the user email");
-        } else {
-          const randomstring = randomString.generate();
-          const updatedData = await UserModel.updateOne(
-            { email: email },
-            { $set: { token: randomstring } }
-          );
-          this.reset_password(userdata.name, userdata.email, randomstring);
-          res.render("login", "Please check your mail to reset your password");
-        }
+      const token = req.query.token;
+      const tokenData = await UserModel.findOne({ token: token });
+      if (tokenData) {
+        res.render("reset_password", { user_id: tokenData._id });
       } else {
-        res.render("login", "User Email is incorrect");
+        res.render("404");
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  static reset_Password1 = async (req, res) => {
+    try {
+      const { password, user_id } = req.body;
+      const newHashPassword = await bcrypt.hash(password, 10);
+      await UserModel.findByIdAndUpdate(user_id, {
+        password: newHashPassword,
+        token: "",
+      });
+      req.flash("success", "Reset Password Updated successfully ");
+      res.redirect("/");
     } catch (error) {
       console.log(error);
     }
