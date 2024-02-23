@@ -194,6 +194,7 @@ class FrontController {
     }
   };
 
+  
   //update profile
   static updateProfile = async (req, res) => {
     try {

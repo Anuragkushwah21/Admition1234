@@ -111,9 +111,13 @@
               <center>
                 <p class="text-uppercase fw-light">
                   Did you forget your password? &nbsp;
-                <a href="#"  data-bs-toggle="modal"
-                data-bs-target="#ForgotPassword">Forgot Password?</a>
-              </p>
+                  <a
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#ForgotPassword"
+                    >Forgot Password?</a
+                  >
+                </p>
               </center>
             </form>
           </div>
@@ -124,50 +128,49 @@
     <!-- End Login -->
     <!-- modal-forgot password -->
     <div
-  class="modal fade"
-  id="ForgotPassword"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Forgot Password</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true"></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="/ForgotPassword" method="post">
-          <div class="form-group">
-            <label for="Email">Email</label>
-            <input
-              type="email"
-              name="email"
-              value=""
-              class="form-control"
-              id="email"
-              placeholder="Enter your email"
-              required
-            />
+      class="modal fade"
+      id="ForgotPassword"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Forgot Password</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
           </div>
+          <div class="modal-body">
+            <form action="/ForgotPassword" method="post">
+              <div class="form-group">
+                <label for="Email">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value=""
+                  class="form-control"
+                  id="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
 
-          
-          <button type="submit" class="btn btn-success btn-block mt-5">
-            Submit
-          </button>
-        </form>
+              <button type="submit" class="btn btn-success btn-block mt-5">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- Java Script Link -->
     <script
