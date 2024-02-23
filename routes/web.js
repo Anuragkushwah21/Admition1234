@@ -4,8 +4,10 @@ const CourseController=require('../controllers/CourseController')
 const AdminController=require('../controllers/AdminController')
 const route = express.Router();
 const checkUserAuth=require('../middleware/auth')
+const adminRoles=require("../middleware/admin")
+const isLogin=require("../middleware/isLogin")
 
-route.get("/", FrontController.login);
+route.get("/",isLogin, FrontController.login);
 route.get("/register", FrontController.register);
 route.get("/about",checkUserAuth, FrontController.about);
 route.get("/profile",checkUserAuth, FrontController.profile);
@@ -34,7 +36,7 @@ route.post("/updateProfile",checkUserAuth, FrontController.updateProfile);
 route.post("/updatePassword",checkUserAuth, FrontController.updatePassword);
 
 //admincontroller
-route.get("/admin/dashboard",checkUserAuth, AdminController.dashboard)
+route.get("/admin/dashboard",checkUserAuth,adminRoles("admin"), AdminController.dashboard)
 route.get("/admin/adminprofile",checkUserAuth, AdminController.AdminProfile)
 route.post("/admin/update_status/:id",checkUserAuth, AdminController.update_status)
 
