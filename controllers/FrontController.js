@@ -132,10 +132,25 @@ class FrontController {
                 url: uploadImage.secure_url,
               },
             });
-            await result.save();
-
-            req.flash("success", "Registration Success plz login!");
-            res.redirect("/"); // route url chalta h
+            const Userdata = await result.save();
+            if (Userdata) {
+              const token = jwt.sign(
+                { ID: Userdata.id },
+                "anuragkushwah15394584728655hgbdhjdn"
+              );
+              // console.log(token)
+              res.cookie("token", token);
+              this.sendVerifyEmail(n, e, Userdata._id);
+              //to redirect to login
+              req.flash(
+                "success",
+                "Registration Success plz verify your email!"
+              );
+              res.redirect("/register"); // route url chalta h
+            } else {
+              req.flash("error", "Not Register");
+              res.redirect("/register");
+            }
           } else {
             req.flash("error", "password and confirm password not same");
             res.redirect("/register");
@@ -158,24 +173,28 @@ class FrontController {
         if (user != null) {
           const isMatched = await bcrypt.compare(p, user.password);
           if (isMatched) {
-            if (user.role == "admin") {
-              let token = jwt.sign(
-                { ID: user.id },
+            if (user.role === "admin"&& use.is_varified==1) {
+              const token = jwt.sign(
+                { ID: Userdata.id },
                 "anuragkushwah15394584728655hgbdhjdn"
               );
               // console.log(token)
               res.cookie("token", token);
               res.redirect("admin/dashboard");
-            } else {
+            } else if(user.role === "user" && user.is_varified==1) {
               //token genrate
 
-              let token = jwt.sign(
+              const token = jwt.sign(
                 { ID: user.id },
                 "anuragkushwah15394584728655hgbdhjdn"
               );
               // console.log(token)
               res.cookie("token", token);
               res.redirect("/dashboard");
+            }else{
+
+              req.flash("error", "Plz verified Email Address");
+              res.redirect("/");
             }
           } else {
             req.flash("error", "Email or Password is not valid");
@@ -194,7 +213,44 @@ class FrontController {
     }
   };
 
-  
+  static sendVerifyEmail = async (name, email, user_id) => {
+    // console.log(name,email,status,comment)
+    // connenct with the smtp server
+
+    let transporter = await nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+
+      auth: {
+        user: "anuragkofficial21@gmail.com",
+        pass: "bjlgmcajfhsvpwwz",
+      },
+    });
+    let info = await transporter.sendMail({
+      from: "test@gmail.com", // sender address
+      to: email, // list of receivers
+      subject: ` For Varification mail`, // Subject line
+      text: "heelo", // plain text body
+      html:
+        "<p>Hii " +
+        name +
+        ',Please click here to <a href="http://localhost:5000/verify?id=' +
+        user_id +
+        '">Verify</a>Your mail</p>.', // html body
+    });
+  };
+
+  static verifyMail = async (req, res) => {
+    try {
+      const updateinfo = await UserModel.findByIdAndUpdate(req.query.id, {
+        is_varified: 1,
+      });
+      if (updateinfo) {
+        res.redirect("/dashboard");
+      }
+    } catch (error) {}
+  };
+
   //update profile
   static updateProfile = async (req, res) => {
     try {
