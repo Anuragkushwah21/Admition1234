@@ -57,7 +57,7 @@ class FrontController {
       const btech = await CourseModel.findOne({ user_id: id, course: "btech" });
       const bca = await CourseModel.findOne({ user_id: id, course: "bca" });
       const mca = await CourseModel.findOne({ user_id: id, course: "mca" });
-      console.log(btech);
+      // console.log(btech);
       res.render("dashboard", {
         n: name,
         i: image,
@@ -142,14 +142,13 @@ class FrontController {
               res.cookie("token", token);
               this.sendVerifyEmail(n, e, Userdata._id);
               //to redirect to login
+              // route url chalta h
+            } else {
               req.flash(
                 "success",
                 "Registration Success plz verify your email!"
               );
-              res.redirect("/register"); // route url chalta h
-            } else {
-              req.flash("error", "Not Register");
-              res.redirect("/register");
+              res.redirect("/");
             }
           } else {
             req.flash("error", "password and confirm password not same");
@@ -173,7 +172,7 @@ class FrontController {
         if (user != null) {
           const isMatched = await bcrypt.compare(p, user.password);
           if (isMatched) {
-            if (user.role === "admin"&& use.is_varified==1) {
+            if (user.role === "admin"&& user.is_varified==1) {
               const token = jwt.sign(
                 { ID: Userdata.id },
                 "anuragkushwah15394584728655hgbdhjdn"
@@ -194,7 +193,7 @@ class FrontController {
             }else{
 
               req.flash("error", "Plz verified Email Address");
-              res.redirect("/");
+              res.redirect("/"); 
             }
           } else {
             req.flash("error", "Email or Password is not valid");
@@ -212,7 +211,6 @@ class FrontController {
       console.log(error);
     }
   };
-
   static sendVerifyEmail = async (name, email, user_id) => {
     // console.log(name,email,status,comment)
     // connenct with the smtp server
@@ -239,7 +237,6 @@ class FrontController {
         '">Verify</a>Your mail</p>.', // html body
     });
   };
-
   static verifyMail = async (req, res) => {
     try {
       const updateinfo = await UserModel.findByIdAndUpdate(req.query.id, {
@@ -250,7 +247,6 @@ class FrontController {
       }
     } catch (error) {}
   };
-
   //update profile
   static updateProfile = async (req, res) => {
     try {
@@ -389,7 +385,6 @@ class FrontController {
       console.log(error);
     }
   };
-
   static reset_Password1 = async (req, res) => {
     try {
       const { password, user_id } = req.body;

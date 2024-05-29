@@ -36,11 +36,6 @@ const Userschema = new mongoose.Schema(
                 Required:true,
             },
         },
-
-        //image:{...
-        //},
-        //is_verifide:{...
-        //}
     },
     { timestamps: true }
 );
