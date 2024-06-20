@@ -143,13 +143,17 @@ class FrontController {
               this.sendVerifyEmail(n, e, Userdata._id);
               //to redirect to login
               // route url chalta h
-            } else {
               req.flash(
                 "success",
                 "Registration Success plz verify your email!"
               );
-              res.redirect("/");
+              res.redirect("/register");
+            } else {
+              req.flash("error", "Not Register.");
+              res.redirect("/register");
             }
+            req.flash("Success", "Register success! plz Login");
+            res.redirect("/"); //url
           } else {
             req.flash("error", "password and confirm password not same");
             res.redirect("/register");
@@ -159,6 +163,13 @@ class FrontController {
           res.redirect("/register");
         }
       }
+      const result = new UserModel({
+        name: n,
+        email: e,
+        password: p,
+      });
+      await result.save();
+      res.redirect("/"); //url
     } catch (error) {
       console.log(error);
     }
@@ -172,15 +183,15 @@ class FrontController {
         if (user != null) {
           const isMatched = await bcrypt.compare(p, user.password);
           if (isMatched) {
-            if (user.role === "admin"&& user.is_varified==1) {
+            if (user.role == "admin" && user.is_varified == 1) {
               const token = jwt.sign(
                 { ID: Userdata.id },
                 "anuragkushwah15394584728655hgbdhjdn"
               );
               // console.log(token)
               res.cookie("token", token);
-              res.redirect("admin/dashboard");
-            } else if(user.role === "user" && user.is_varified==1) {
+              res.redirect("/admin/dashboard");
+            } else if (user.role == "user" && user.is_varified == 1) {
               //token genrate
 
               const token = jwt.sign(
@@ -190,10 +201,9 @@ class FrontController {
               // console.log(token)
               res.cookie("token", token);
               res.redirect("/dashboard");
-            }else{
-
+            } else {
               req.flash("error", "Plz verified Email Address");
-              res.redirect("/"); 
+              res.redirect("/");
             }
           } else {
             req.flash("error", "Email or Password is not valid");

@@ -4,11 +4,9 @@
     <div class="col-md-4 offset-md-4">
       <div class="card mt-5">
         <% if(msg.length>0){%>
-          <div class="alert alert-success">
-            <%=msg%>
-          </div>
-      
-          <%}%>
+        <div class="alert alert-success"><%=msg%></div>
+
+        <%}%>
         <a
           href="#"
           class="nav-link d-block link-body-emphasis text-decoration-none text-center mt-5"
@@ -108,7 +106,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="/updateProfile" method="post" enctype="multipart/form-data">
+        <form
+          action="/updateProfile"
+          method="post"
+          enctype="multipart/form-data"
+        >
           <div class="form-group">
             <label for="newName">New Name</label>
             <input
@@ -143,7 +145,7 @@
               class="form-control-file"
               id="profileImage"
             />
-            <img src="<%=i.url%>" alt="" width="80">
+            <img src="<%=i.url%>" alt="" width="80" />
           </div>
 
           <button type="submit" class="btn btn-success btn-block mt-5">
