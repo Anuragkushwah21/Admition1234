@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const UserModel = require("../models/user");
+
 const isLogin = async (req, res, next) => {
   //console.log("hello midlewere")
 

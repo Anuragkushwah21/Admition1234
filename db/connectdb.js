@@ -5,8 +5,8 @@ const Local_URL = "mongodb://0.0.0.0:27017/admission123";
 
 const connectDb = () => {
   mongoose
-    .connect(Local_URL)
-    // .connect(Live_URL)
+    // .connect(Local_URL)
+    .connect(Live_URL)
 
     .then(() => {
       console.log("connected sucessfully");

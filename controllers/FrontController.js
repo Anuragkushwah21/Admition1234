@@ -183,7 +183,7 @@ class FrontController {
         if (user != null) {
           const isMatched = await bcrypt.compare(p, user.password);
           if (isMatched) {
-            if (user.role == "admin" && user.is_varified == 1) {
+            if (user.role === "admin" && user.is_varified == 1) {
               const token = jwt.sign(
                 { ID: Userdata.id },
                 "anuragkushwah15394584728655hgbdhjdn"
@@ -191,7 +191,7 @@ class FrontController {
               // console.log(token)
               res.cookie("token", token);
               res.redirect("/admin/dashboard");
-            } else if (user.role == "user" && user.is_varified == 1) {
+            } else if (user.role === "user" && user.is_varified == 1) {
               //token genrate
 
               const token = jwt.sign(
@@ -377,7 +377,7 @@ class FrontController {
       html:
         "<p>Hii " +
         name +
-        ',Please click here to <a href="http://localhost:5000/reset-password?token=' +
+        ',Please click here to <a href="https://admission-6ywv.onrender.com/reset-password?token=' +
         token +
         '">Reset</a>Your Password.',
     });
