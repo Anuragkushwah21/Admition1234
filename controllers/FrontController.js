@@ -185,7 +185,7 @@ class FrontController {
           if (isMatched) {
             if (user.role === "admin" && user.is_varified == 1) {
               const token = jwt.sign(
-                { ID: Userdata.id },
+                { ID: user.id },
                 "anuragkushwah15394584728655hgbdhjdn"
               );
               // console.log(token)
@@ -221,6 +221,8 @@ class FrontController {
       console.log(error);
     }
   };
+
+  //veifiy mail and send msg on email
   static sendVerifyEmail = async (name, email, user_id) => {
     // console.log(name,email,status,comment)
     // connenct with the smtp server
@@ -252,8 +254,13 @@ class FrontController {
       const updateinfo = await UserModel.findByIdAndUpdate(req.query.id, {
         is_varified: 1,
       });
+      const updateinfoadmin = await UserModel.findByIdAndUpdate(req.query.id, {
+        is_varified: 1,
+      });
       if (updateinfo) {
         res.redirect("/dashboard");
+      } else if (updateinfoadmin) {
+        res.redirect("/admin/dashboard");
       }
     } catch (error) {}
   };
@@ -377,7 +384,7 @@ class FrontController {
       html:
         "<p>Hii " +
         name +
-        ',Please click here to <a href="https://admission-6ywv.onrender.com/reset-password?token=' +
+        ',Please click here to <a href="http://localhost:5000/reset-password?token=' +
         token +
         '">Reset</a>Your Password.',
     });
