@@ -244,10 +244,11 @@ class FrontController {
       html:
         "<p>Hii " +
         name +
-        ',Please click here to <a href="http://localhost:5000/verify?id=' +
+        ',Please click here to <a href="https://admission-6ywv.onrender.com/verify?id=' +
         user_id +
         '">Verify</a>Your mail</p>.', // html body
     });
+    //http://localhost:5000
   };
   static verifyMail = async (req, res) => {
     try {
