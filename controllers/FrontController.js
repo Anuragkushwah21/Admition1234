@@ -324,7 +324,7 @@ class FrontController {
         const isMatched = await bcrypt.compare(op, user.password);
         console.log(isMatched);
         if (!isMatched) {
-          req.flash("error", "Current password is incorrenct");
+          req.flash("error", "Current password is incorrect");
           res.redirect("/profile");
         } else {
           if (np != cp) {
@@ -336,7 +336,7 @@ class FrontController {
               password: newHashPassword,
             });
             req.flash("success", "Password Update Successfully");
-            res.redirect("/");
+            res.redirect("/profile");
           }
         }
       } else {
