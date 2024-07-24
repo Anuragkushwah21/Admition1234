@@ -4,9 +4,12 @@
     <div class="col-md-4 offset-md-4">
       <div class="card mt-5">
         <% if(msg.length>0){%>
-        <div class="alert alert-success"><%=msg%></div>
+          <div class="alert alert-success"><%=msg%></div>
 
-        <%}%>
+          <%}%> <% if(error.length>0){%>
+          <div class="alert alert-danger"><%=error%></div>
+
+          <%}%>
         <a
           href="#"
           class="nav-link d-block link-body-emphasis text-decoration-none text-center mt-5"

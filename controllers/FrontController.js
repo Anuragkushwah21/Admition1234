@@ -46,7 +46,10 @@ class FrontController {
   };
   static register = async (req, res) => {
     try {
-      res.render("register", { msg: req.flash("error") });
+      res.render("register",{
+        msg: req.flash("success"),
+        error: req.flash("error"),
+      });
     } catch (error) {
       console.log(error);
     }
@@ -222,7 +225,7 @@ class FrontController {
     }
   };
 
-  //veifiy mail and send msg on email
+  //verifiy mail and send msg on email
   static sendVerifyEmail = async (name, email, user_id) => {
     // console.log(name,email,status,comment)
     // connenct with the smtp server
@@ -248,6 +251,8 @@ class FrontController {
         user_id +
         '">Verify</a>Your mail</p>.', // html body
     });
+
+    //
     //http://localhost:5000
   };
   static verifyMail = async (req, res) => {
@@ -255,15 +260,14 @@ class FrontController {
       const updateinfo = await UserModel.findByIdAndUpdate(req.query.id, {
         is_varified: 1,
       });
-      const updateinfoadmin = await UserModel.findByIdAndUpdate(req.query.id, {
-        is_varified: 1,
-      });
       if (updateinfo) {
         res.redirect("/dashboard");
-      } else if (updateinfoadmin) {
+      } else {
         res.redirect("/admin/dashboard");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
   //update profile
   static updateProfile = async (req, res) => {

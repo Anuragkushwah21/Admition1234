@@ -38,9 +38,10 @@
             <!-- Heading (Register Here) -->
             <h1 class="mb-5 text-center">Register Here</h1>
             <% if(msg.length>0){%>
-              <div class="alert alert-danger">
-                <%=msg%>
-              </div>
+              <div class="alert alert-success"><%=msg%></div>
+
+              <%}%> <% if(error.length>0){%>
+              <div class="alert alert-danger"><%=error%></div>
 
               <%}%>
                 <!-- User Name -->
