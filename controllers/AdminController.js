@@ -41,7 +41,7 @@ class AdminController {
   };
   static sendEmail = async (name,email,status,comment) => {
     console.log(name,email,status,comment)
-    // connenct with the smtp server
+    // connect with the smtp server
 
     let transporter = await nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -56,7 +56,7 @@ class AdminController {
         from: "test@gmail.com", // sender address
         to: email, // list of receivers
         subject: ` Course ${status}`, // Subject line
-        text: "heelo", // plain text body
+        text: "hello", // plain text body
         html: `<b>${name}</b> Course  <b>${status}</b> successful! <br>
          <b>Comment from Admin</b> ${comment} `, // html body
     });

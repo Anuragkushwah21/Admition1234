@@ -125,6 +125,7 @@ class FrontController {
       } else {
         if (n && e && p && cp) {
           if (p == cp) {
+      
             const hashpassword = await bcrypt.hash(p, 10);
             const result = new UserModel({
               name: n,
@@ -142,6 +143,7 @@ class FrontController {
                 "anuragkushwah15394584728655hgbdhjdn"
               );
               // console.log(token)
+              
               res.cookie("token", token);
               this.sendVerifyEmail(n, e, Userdata._id);
               //to redirect to login
@@ -236,7 +238,7 @@ class FrontController {
 
       auth: {
         user: "anuragkofficial21@gmail.com",
-        pass: "bjlgmcajfhsvpwwz",
+        pass: "bjlgmcajfhsvpwwz", 
       },
     });
     let info = await transporter.sendMail({
